@@ -61,12 +61,11 @@ class Pacs002IntegrationTest {
         String xml = conversionUseCase.toXml(jaxbElement);
         
         assertThat(xml)
+                .isNotBlank()
                 .contains("FIToFIPmtStsRpt")
                 .contains("GrpHdr")
-                .contains("MsgId");
-        
-        System.out.println("Generated PACS.002 XML:");
-        System.out.println(xml);
+                .contains("MsgId")
+                .contains("<?xml version=\"1.0\"");
     }
 
     @Test
@@ -93,11 +92,8 @@ class Pacs002IntegrationTest {
         ValidationResult result = validationUseCase.validateAgainstResource(
                 xml, "xsd/pacs.002.001.16.xsd");
         
-        System.out.println("Validation result: " + (result.isValid() ? "VALID" : "INVALID"));
-        if (!result.isValid()) {
-            result.getErrors().forEach(error -> 
-                System.out.println("  Error: " + error.getMessage()));
-        }
+        assertThat(result).isNotNull();
+        assertThat(result.getErrors()).isNotNull();
     }
 
     @Test

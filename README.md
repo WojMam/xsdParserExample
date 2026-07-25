@@ -249,6 +249,29 @@ Contains implementations of ports and technical concerns:
 | Mockito | 5.11.0 | Mocking framework |
 | Instancio | 4.3.2 | Test data generation |
 
+## Adding New Schemas
+
+The library supports easy schema extension with auto-discovery:
+
+```java
+// 1. Add XSD file to src/main/resources/xsd/ (e.g., pain.001.001.12.xsd)
+// 2. Add JAXB generation to pom.xml
+// 3. Use auto-discovery - schemas are detected automatically!
+XsdParserConfig config = XsdParserConfig.createWithAutoDiscovery();
+```
+
+Or register programmatically:
+
+```java
+XsdParserConfig config = XsdParserConfig.builder()
+    .withAutoDiscovery()
+    .addPainSchema("001", "001.12", "Customer Credit Transfer")
+    .addCamtSchema("053", "001.11", "Bank to Customer Statement")
+    .build();
+```
+
+See [ADDING_NEW_SCHEMAS.md](ADDING_NEW_SCHEMAS.md) for the complete guide.
+
 ## AI Agent Integration
 
 This project includes special documentation for AI agents (Copilot, Claude, etc.) to quickly understand and integrate the library:
@@ -258,6 +281,7 @@ This project includes special documentation for AI agents (Copilot, Claude, etc.
 | [INTEGRATION.md](INTEGRATION.md) | Step-by-step integration guide with copy-paste ready code |
 | [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) | Quick reference for AI agents with templates and patterns |
 | [SNIPPETS.md](SNIPPETS.md) | Self-contained, ready-to-use code snippets |
+| [ADDING_NEW_SCHEMAS.md](ADDING_NEW_SCHEMAS.md) | How to add new XSD schemas |
 
 ### Quick Integration for AI Agents
 

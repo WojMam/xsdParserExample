@@ -272,6 +272,34 @@ Document doc = Pacs008TestBuilder.create()
 | pacs.028 | `FIToFIPaymentStatusRequestV07` | Status Request |
 | pacs.029 | `FIToFIPaymentStatusReportAcknowledgementV02` | Status Acknowledgement |
 
+## Adding New Schemas
+
+The library supports easy schema extension. See [ADDING_NEW_SCHEMAS.md](ADDING_NEW_SCHEMAS.md) for full details.
+
+### Quick Method: Auto-Discovery
+
+```java
+// 1. Add XSD file to src/main/resources/xsd/ (e.g., pain.001.001.12.xsd)
+// 2. Add JAXB generation to pom.xml
+// 3. Use auto-discovery:
+XsdParserConfig config = XsdParserConfig.createWithAutoDiscovery();
+```
+
+### Programmatic Registration
+
+```java
+XsdParserConfig config = XsdParserConfig.builder()
+    .withAutoDiscovery()
+    .addPainSchema("001", "001.12", "Customer Credit Transfer")
+    .addCamtSchema("053", "001.11", "Bank to Customer Statement")
+    .addSchema(SchemaDefinition.builder()
+        .messageType("acmt.007")
+        .version("001.03")
+        .description("Account Opening Request")
+        .build())
+    .build();
+```
+
 ## Troubleshooting
 
 ### JAXB Context Error

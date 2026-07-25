@@ -47,9 +47,16 @@ public class XmlProcessingService {
 
         Optional<SchemaInfo> schemaInfoOpt = schemaRegistry.findByMessageType(messageType);
         if (schemaInfoOpt.isEmpty()) {
-            logger.warn("No schema found for message type: {}", messageType);
+            String availableSchemas = schemaRegistry.getAllSchemas().stream()
+                    .map(s -> s.getMessageType())
+                    .sorted()
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("none");
+            logger.warn("No schema found for message type '{}'. Available schemas: [{}]", messageType, availableSchemas);
             return ValidationResult.invalid(
-                    ValidationResult.ValidationError.of("Schema not found for message type: " + messageType)
+                    ValidationResult.ValidationError.of(
+                            String.format("Schema not found for message type '%s'. Available schemas: [%s]", 
+                                    messageType, availableSchemas))
             );
         }
 
@@ -107,8 +114,16 @@ public class XmlProcessingService {
 
         Optional<SchemaInfo> schemaInfoOpt = schemaRegistry.findByMessageType(messageType);
         if (schemaInfoOpt.isEmpty()) {
+            String availableSchemas = schemaRegistry.getAllSchemas().stream()
+                    .map(s -> s.getMessageType())
+                    .sorted()
+                    .reduce((a, b) -> a + ", " + b)
+                    .orElse("none");
+            logger.warn("No schema found for message type '{}'. Available schemas: [{}]", messageType, availableSchemas);
             return ValidationResult.invalid(
-                    ValidationResult.ValidationError.of("Schema not found for message type: " + messageType)
+                    ValidationResult.ValidationError.of(
+                            String.format("Schema not found for message type '%s'. Available schemas: [%s]", 
+                                    messageType, availableSchemas))
             );
         }
 

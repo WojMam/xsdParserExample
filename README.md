@@ -249,6 +249,34 @@ Contains implementations of ports and technical concerns:
 | Mockito | 5.11.0 | Mocking framework |
 | Instancio | 4.3.2 | Test data generation |
 
+## AI Agent Integration
+
+This project includes special documentation for AI agents (Copilot, Claude, etc.) to quickly understand and integrate the library:
+
+| Document | Purpose |
+|----------|---------|
+| [INTEGRATION.md](INTEGRATION.md) | Step-by-step integration guide with copy-paste ready code |
+| [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md) | Quick reference for AI agents with templates and patterns |
+| [SNIPPETS.md](SNIPPETS.md) | Self-contained, ready-to-use code snippets |
+
+### Quick Integration for AI Agents
+
+```java
+// 1. Initialize (one-time setup)
+XmlSerializer serializer = new JaxbXmlSerializer();
+XmlValidator validator = new SchemaBasedXmlValidator();
+SchemaRegistry registry = new InMemorySchemaRegistry();
+new PacsSchemaInitializer(registry).initializeSchemas();
+XmlProcessingService service = new XmlProcessingService(serializer, validator, registry);
+
+// 2. Generate test data
+String messageId = Iso20022TestDataFactory.generateMessageId();
+String iban = Iso20022TestDataFactory.generateIban("DE");
+
+// 3. Validate XML
+ValidationResult result = service.validateXml(xml, "pacs.008");
+```
+
 ## Contributing
 
 1. Fork the repository

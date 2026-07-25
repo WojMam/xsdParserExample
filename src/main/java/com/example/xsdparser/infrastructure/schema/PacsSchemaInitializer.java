@@ -1,5 +1,6 @@
 package com.example.xsdparser.infrastructure.schema;
 
+import com.example.xsdparser.core.Iso20022Constants;
 import com.example.xsdparser.core.model.SchemaInfo;
 import com.example.xsdparser.core.port.SchemaRegistry;
 import org.slf4j.Logger;
@@ -15,9 +16,6 @@ import java.nio.file.Paths;
 public class PacsSchemaInitializer {
 
     private static final Logger logger = LoggerFactory.getLogger(PacsSchemaInitializer.class);
-
-    private static final String BASE_NAMESPACE = "urn:iso:std:iso:20022:tech:xsd:";
-    private static final String XSD_RESOURCE_PATH = "xsd/";
 
     private final SchemaRegistry registry;
 
@@ -63,8 +61,8 @@ public class PacsSchemaInitializer {
 
     private void registerSchema(String messageType, String version, String shortDescription, String fullDescription) {
         String fullIdentifier = messageType + "." + version;
-        String namespace = BASE_NAMESPACE + fullIdentifier;
-        Path schemaPath = Paths.get(XSD_RESOURCE_PATH + fullIdentifier + ".xsd");
+        String namespace = Iso20022Constants.buildNamespace(messageType, version);
+        Path schemaPath = Paths.get(Iso20022Constants.buildSchemaPath(messageType, version));
 
         SchemaInfo schemaInfo = SchemaInfo.builder()
                 .messageType(messageType)

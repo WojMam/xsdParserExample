@@ -64,12 +64,11 @@ class Pacs008IntegrationTest {
         String xml = serializer.serializeFormatted(jaxbElement);
         
         assertThat(xml)
+                .isNotBlank()
                 .contains("FIToFICstmrCdtTrf")
                 .contains("GrpHdr")
-                .contains("CdtTrfTxInf");
-        
-        System.out.println("Generated PACS.008 XML:");
-        System.out.println(xml);
+                .contains("CdtTrfTxInf")
+                .contains("<?xml version=\"1.0\"");
     }
 
     @Test
@@ -161,11 +160,8 @@ class Pacs008IntegrationTest {
         ValidationResult result = validationUseCase.validateAgainstResource(
                 xml, "xsd/pacs.008.001.14.xsd");
         
-        System.out.println("Validation result: " + (result.isValid() ? "VALID" : "INVALID"));
-        if (!result.isValid()) {
-            result.getErrors().forEach(error -> 
-                System.out.println("  Error: " + error.getMessage()));
-        }
+        assertThat(result).isNotNull();
+        assertThat(result.getErrors()).isNotNull();
     }
 
     @Test

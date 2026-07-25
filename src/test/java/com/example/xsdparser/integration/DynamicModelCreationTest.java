@@ -52,11 +52,12 @@ class DynamicModelCreationTest {
         JAXBElement<Document> jaxbElement = objectFactory.createDocument(document);
         String xml = serializer.serializeFormatted(jaxbElement);
         
-        assertThat(xml).isNotBlank();
+        assertThat(xml)
+                .isNotBlank()
+                .contains("FIToFIPmtStsRpt")
+                .contains("GrpHdr")
+                .contains(header.getMsgId());
         assertThat(document.getFIToFIPmtStsRpt().getGrpHdr().getMsgId()).isNotNull();
-        
-        System.out.println("=== Dynamically Created PACS.002 Test Data ===");
-        System.out.println(xml);
     }
 
     @Test
@@ -104,14 +105,16 @@ class DynamicModelCreationTest {
         String bic = Iso20022TestDataFactory.generateBic();
         String lei = Iso20022TestDataFactory.generateLei();
         
-        assertThat(iban).startsWith("DE").hasSize(22);
-        assertThat(bic).hasSizeBetween(8, 11);
-        assertThat(lei).hasSize(20);
-        
-        System.out.println("Generated identifiers:");
-        System.out.println("  IBAN: " + iban);
-        System.out.println("  BIC: " + bic);
-        System.out.println("  LEI: " + lei);
+        assertThat(iban)
+                .startsWith("DE")
+                .hasSize(22)
+                .matches("[A-Z]{2}[0-9]{20}");
+        assertThat(bic)
+                .hasSizeBetween(8, 11)
+                .matches("[A-Z]{4}[A-Z]{2}[A-Z0-9]{2,5}");
+        assertThat(lei)
+                .hasSize(20)
+                .matches("[A-Z0-9]{20}");
     }
 
     @Test

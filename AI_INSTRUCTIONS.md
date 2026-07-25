@@ -292,9 +292,22 @@ src/main/resources/
 ## Quick Answers
 
 **Q: How do I add a new XSD schema?**
-1. Add XSD file to `src/main/resources/xsd/`
+
+The easiest way (auto-discovery):
+1. Add XSD file to `src/main/resources/xsd/` (naming: `family.number.major.minor.xsd`)
 2. Add execution to `jaxb2-maven-plugin` in `pom.xml`
-3. Register in `PacsSchemaInitializer`
+3. Use `XsdParserConfig.createWithAutoDiscovery()` - schemas are auto-detected!
+
+Or programmatically:
+```java
+XsdParserConfig config = XsdParserConfig.builder()
+    .withAutoDiscovery()
+    .addPainSchema("001", "001.12", "Customer Credit Transfer")
+    .addCamtSchema("053", "001.11", "Bank to Customer Statement")
+    .build();
+```
+
+See [ADDING_NEW_SCHEMAS.md](ADDING_NEW_SCHEMAS.md) for full guide.
 
 **Q: How do I customize serialization?**
 Use `JaxbXmlSerializer` methods: `serialize()`, `serializeFormatted()`, or extend the class.
